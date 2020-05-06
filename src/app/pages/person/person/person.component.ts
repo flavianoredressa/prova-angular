@@ -1,9 +1,9 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
-import { CepService } from 'src/app/services/cep.service';
+import { UserService } from 'src/app/core/services/user.service';
+import { CepService } from 'src/app/core/services/cep.service';
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { User } from 'src/app/models/user';
+import { User } from 'src/app/core/models/user';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -18,6 +18,7 @@ export class PersonComponent implements OnInit {
   user = new User()
   formGroup: FormGroup;
   submitted = false;
+  phoneMask = '(00) 0000-00000';
   constructor(
     private _user: UserService,
     private _cep: CepService,
@@ -27,12 +28,12 @@ export class PersonComponent implements OnInit {
     private formBuilder: FormBuilder) { }
 
     async ngOnInit() {
-    
+      this._spinner.show()
     this.formGroup = this.formBuilder.group({
       name: ['', [Validators.required]],
-      email: [''],
+      email: ['', [Validators.required, Validators.email]],
       phone: [''],
-      cpf: [''],
+      cpf: ['', [Validators.required]],
       cep: [''],
       logradouro: [''],
       numero: [''],
@@ -44,7 +45,13 @@ export class PersonComponent implements OnInit {
     if (userId) {
       this.user = await this._user.getById(userId)
       this.formGroup.patchValue(this.user);
+      if(this.user.phone.length == 11){
+        this.phoneMask = '(00) 0000-00000';
+      } else {
+        this.phoneMask = '(00) 0000-0000';
+      }
     }
+    this._spinner.hide()
   }
   async onSubmit() {
     this.submitted = true;
@@ -53,7 +60,8 @@ export class PersonComponent implements OnInit {
     }
     this._spinner.show()
     Object.assign(this.user, this.formGroup.value);
-    this._user.add(this.user).then(() => {
+    
+    this._user.save(this.user).then(() => {
       Swal.fire({
         title: 'Ótimo',
         text: 'Colaborador foi adicionado com sucesso',
@@ -84,5 +92,13 @@ export class PersonComponent implements OnInit {
   }
   get f() {
     return this.formGroup.controls;
+  }
+
+  checkMask(event: any) {
+    if (event.target.value.length <= 14) {
+      this.phoneMask = '(00) 0000-00009';
+    } else {
+      this.phoneMask = '(00) 00000-0000';
+    }
   }
 }

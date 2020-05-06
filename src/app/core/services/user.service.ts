@@ -16,10 +16,17 @@ export class UserService {
   getById(userId){
     return this.http.get<User>(`${environment.url}person/${userId}`).toPromise()
   }
-  add(user: User){
+  save(user: User){
+    if(user.id){
+      return this.update(user);
+    } else {
+      return  this.add(user);
+    }
+  }
+  private add(user: User){
     return this.http.post(`${environment.url}person`, user).toPromise()
   }
-  update(user: User){
+  private update(user: User){
     return this.http.put(`${environment.url}person/${user.id}`, user).toPromise()
   }
   delete(userId){

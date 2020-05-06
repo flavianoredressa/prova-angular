@@ -1,72 +1,81 @@
+
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" novalidate *ngIf="!loading">
     <div class="row p-4">
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <helper-input label='CPF' name='cpf' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
-            </div>
+                <label class="ng-star-inserted">CPF</label>
+                <input placeholder="Digite o CPF" mask="000.000.000-00" [class.is-invalid]="submitted && f.cpf.errors" class="form-control" name='cpf'
+                    formControlName='cpf' />
+                <div *ngIf="submitted && f.cpf.errors" class="invalid-feedback">
+                    <div *ngIf="f.cpf.errors">CPF é obrigatório</div>
+                </div>
+            </div>           
         </div>
         <div class="col-md-9">
             <div class="form-group mb-3">
-                <helper-input label='Nome' name='name' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <helpper-input label='Nome' name='name' [submitted]='submitted' [formGroup]="formGroup">
+                </helpper-input>
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <helper-input label='Telefone' name='phone' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <label class="ng-star-inserted">Telefone</label>
+                <input [(mask)]="phoneMask" placeholder="Digite o Telefone" (keyup)='checkMask($event)' [class.is-invalid]="submitted && f.phone.errors" class="form-control"
+                    name='phone' formControlName='phone' />
             </div>
         </div>
         <div class="col-md-9">
             <div class="form-group mb-3">
-                <helper-input label='Email' name='email' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <helpper-input label='Email' name='email' [submitted]='submitted' [formGroup]="formGroup">
+                </helpper-input>
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-group mb-3">
-                <helper-input (onfocusout)="getCep()" label='CEP' name='cep' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <div class="form-group mb-3">
+                    <label class="ng-star-inserted">CEP</label>
+                    <input mask="00000-000" (blur)="getCep()" placeholder="00000-000" class="form-control"
+                        name='cep' formControlName='cep' />
+                </div>
             </div>
         </div>
         <div class="col-md-8">
             <div class="form-group mb-3">
-                <helper-input label='Logradouro' name='logradouro' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <helpper-input label='Logradouro' name='logradouro' [submitted]='submitted' [formGroup]="formGroup">
+                </helpper-input>
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-group mb-3">
-                <helper-input label='Numero' name='numero' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <helpper-input label='Numero' name='numero' [submitted]='submitted' [formGroup]="formGroup">
+                </helpper-input>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group mb-3">
-                <helper-input label='Bairro' name='bairro' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <helpper-input label='Bairro' name='bairro' [submitted]='submitted' [formGroup]="formGroup">
+                </helpper-input>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group mb-3">
-                <helper-input label='Cidade' name='cidade' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <helpper-input label='Cidade' name='cidade' [submitted]='submitted' [formGroup]="formGroup">
+                </helpper-input>
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group mb-3">
-                <helper-input label='Estado' name='estado' [submitted]='submitted' [formGroup]="formGroup">
-                </helper-input>
+                <helpper-input label='Estado' name='estado' [submitted]='submitted' [formGroup]="formGroup">
+                </helpper-input>
             </div>
         </div>
     </div>
-    <div class="row p-4">
-        <div class="col-md-6">
-            <button type="submit" class="btn btn-blue block waves-effect waves-ligh">
-                <span class="spinner-grow spinner-grow-sm mr-1" ></span>
-                Salvar
-            </button>
+    <div class="row pr-4">
+        <div class="offset-md-8 col-md-2">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-block">Voltar</a>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary btn-block">Salvar</button>
         </div>
     </div>
 </form>

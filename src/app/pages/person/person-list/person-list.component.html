@@ -21,11 +21,12 @@
             <tbody>
               <tr *ngFor="let user of users">
                 <td>{{user.name}}</td>
-                <td>{{user.cpf}}</td>
-                <td>{{user.telefone}}</td>
+                <td>{{user.cpf | mask: '000.000.000-00'}}</td>
+                <td *ngIf="user.phone.length < 11" >{{user.phone | mask: '(00) 0000-0000'}}</td>
+                <td *ngIf="user.phone.length == 11" >{{user.phone | mask: '(00) 00000-0000'}}</td>
                 <td>{{user.email}}</td>
-                <td>{{user.name}}</td>
-                <td>{{user.name}}</td>
+                <td>{{user.cidade}}</td>
+                <td>{{user.estado}}</td>
                 <td>
                     <a [routerLink]="['/person', user.id]" ngbTooltip="Visualizar/Editar">
                         <img src='../../../../assets/edit.svg'/>
