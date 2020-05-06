@@ -8,9 +8,7 @@ import { NgxMaskModule } from 'ngx-mask';
 @NgModule({
   imports: [
     CommonModule,
-    //  ImageCropperModule,
      ReactiveFormsModule,
-    //  NgSelectModule,
      NgxMaskModule.forRoot()
     ],
   declarations: [InputFormComponent],

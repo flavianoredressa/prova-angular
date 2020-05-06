@@ -5,7 +5,7 @@ type NewType = number;
 
 @Component({
   // tslint:disable-next-line: component-selector
-  selector: 'helper-input',
+  selector: 'helpper-input',
   templateUrl: './input-form.component.html',
   styleUrls: ['./input-form.component.scss'],
 })
