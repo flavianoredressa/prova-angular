@@ -13,6 +13,9 @@ export class UserService {
   getUsers(){
     return this.http.get(`${environment.url}person`).toPromise()
   }
+  getById(userId){
+    return this.http.get<User>(`${environment.url}person/${userId}`).toPromise()
+  }
   add(user: User){
     return this.http.post(`${environment.url}person`, user).toPromise()
   }
