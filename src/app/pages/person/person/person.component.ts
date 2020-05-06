@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { User } from 'src/app/models/user';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-person',
@@ -16,50 +17,46 @@ export class PersonComponent implements OnInit {
 
   user = new User()
   formGroup: FormGroup;
+  submitted = false;
   constructor(
     private _user: UserService,
     private _cep: CepService,
     private _spinner: NgxSpinnerService,
+    private activatedRoute: ActivatedRoute,
     private location: Location,
     private formBuilder: FormBuilder) { }
 
-  ngOnInit() {
+    async ngOnInit() {
+    
     this.formGroup = this.formBuilder.group({
-      // nome: ['', [Validators.required]],
-      // email: ['', [Validators.required]],
-      // phone: ['', [Validators.required]],
-      // cpf: ['', [Validators.required]],
-      // cep: ['', [Validators.required]],
-      // logradouro: ['', [Validators.required]],
-      // numero: ['', [Validators.required]],
-      // bairro: ['', [Validators.required]],
-      // cidade: ['', [Validators.required]],
-      // estado: ['', [Validators.required]],
-      name: [''],
+      name: ['', [Validators.required]],
       email: [''],
       phone: [''],
       cpf: [''],
-      // endereco: this.formBuilder.group({
-        cep: [''],
-        logradouro: [''],
-        numero: [''],
-        bairro: [''],
-        cidade: [''],
-        estado: [''],
-      // })
-      
+      cep: [''],
+      logradouro: [''],
+      numero: [''],
+      bairro: [''],
+      cidade: [''],
+      estado: ['']
     })
+    const userId = this.activatedRoute.snapshot.paramMap.get('itemId');
+    if (userId) {
+      this.user = await this._user.getById(userId)
+      this.formGroup.patchValue(this.user);
+    }
   }
   async onSubmit() {
-    this._spinner.show()
-      if(this.formGroup.invalid) {
+    this.submitted = true;
+    if (this.formGroup.invalid) {
       return;
     }
+    this._spinner.show()
     Object.assign(this.user, this.formGroup.value);
-    this._user.add(this.user).then(() =>{
+    this._user.add(this.user).then(() => {
       Swal.fire({
-        title:'Ótimo',
-        text:'Colaborador foi adicionado com sucesso',
+        title: 'Ótimo',
+        text: 'Colaborador foi adicionado com sucesso',
         type: 'success',
         confirmButtonText: 'OK!',
         allowOutsideClick: () => !Swal.isLoading()
@@ -73,7 +70,7 @@ export class PersonComponent implements OnInit {
   }
 
   getCep() {
-    if(this.f.cep.value.length == 8){
+    if (this.f.cep.value.length == 8) {
       this._spinner.show()
       this._cep.getCep(this.f.cep.value).then((res: any) => {
         this.f.logradouro.setValue(res.logradouro)
@@ -83,7 +80,7 @@ export class PersonComponent implements OnInit {
         this._spinner.hide()
       }).catch(e => this._spinner.hide())
     }
-    
+
   }
   get f() {
     return this.formGroup.controls;
