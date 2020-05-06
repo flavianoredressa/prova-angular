@@ -1,0 +1,11 @@
+<div [formGroup]="formGroup">
+  <label *ngIf="type!='checkbox'" [for]="name">{{label}} <span [hidden]="!required" class="text-danger">*</span></label>
+  <input *ngIf="type!='textarea' &&  type!='select' &&  type!='checkbox'" [formControlName]="name" [type]="type"
+    [id]="name" class="form-control" placeholder="Digite o {{label}}" [class.is-invalid]="submitted && f.errors"
+    data-toggle="input-mask" [mask]="mask" />
+
+  <span class="font-13 text-muted">{{ex}}</span>
+  <div *ngIf="submitted && f.errors" class="invalid-feedback">
+    <div *ngIf="f.errors.required">{{label}} é obrigatório</div>
+  </div>
+</div>
